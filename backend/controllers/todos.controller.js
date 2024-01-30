@@ -8,7 +8,7 @@ const CreateTask = async (req , res) => {
             message : "Task is created"
         })
     } catch (error) {
-        res.status(400).json({message : message.error})
+        res.status(400).json({message : error.message})
     }
 }
 
@@ -20,7 +20,7 @@ const getTask = async (req, res) => {
             message : "All tasks are fetched "
         })
     } catch (error) {
-        res.status(400).json({message : message.error})
+        res.status(400).json({message : error.message})
     }
 }
 
@@ -32,7 +32,7 @@ const getTaskById = async (req , res) => {
             message : "All tasks are fetched "
         })
     } catch (error) {
-        res.status(400).json({message : message.error})
+        res.status(400).json({message : error.message})
     }
 }
 
@@ -45,7 +45,7 @@ const UpdateTask = async(req , res)=> {
     })
     
   } catch (error) {
-    res.status(400).json({message : message.error})
+    res.status(400).json({message : error.message})
   }
 }
 
@@ -57,7 +57,7 @@ const DeleteTask = async(req , res) => {
             message : "Task is deleted "
         })  
     } catch (error) {
-        res.status(400).json({message : message.error})
+        res.status(400).json({message : error.message})
     }
 }
 

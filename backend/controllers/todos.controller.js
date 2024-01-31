@@ -1,4 +1,4 @@
-import TodoModel from "../models/todo.schema"
+import TodoModel from "../models/todo.schema.js"
 
 const CreateTask = async (req , res) => {
     try {
@@ -61,7 +61,7 @@ const DeleteTask = async(req , res) => {
     }
 }
 
-export {
+export default {
     CreateTask, 
     getTask,
     getTaskById,

@@ -8,6 +8,7 @@ const TodoSchema = new mongoose.Schema({
       priorite: {
         type: String, // Vous pouvez ajuster le type selon vos besoins (String, Number, etc.)
         required: true,
+        enum: ['Hight', 'Medium', 'Low']
       },
       statut: {
         type: String,

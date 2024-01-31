@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
 import process from "process"
-// import routes from "./routes/todos.routes";
+import router from "./routes/todos.routes.js"
 
 dotenv.config();
 const app = express();
@@ -16,7 +16,7 @@ mongoose.connect(MONGODB_URL)
 
 
 app.use(express.json());
-// app.use("/api" , routes)
+app.use("/api" , router)
 
 
 app.get("/" , (req , res)=> {

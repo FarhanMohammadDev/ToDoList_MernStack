@@ -139,7 +139,6 @@ const Todolist = () => {
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
         ) : null}
-
         {/* -------------------------Todo----------------------- */}
         <div  className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/3 border-solid border-2 border-yellow-500 ">
           <div className="mb-4 p-6 bg-yellow-500">

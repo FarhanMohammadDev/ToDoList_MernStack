@@ -16,8 +16,8 @@ const Todolist = () => {
 
     try {
       
-     const response = await axios.post("http://localhost:3000/api/tasks" , newTask);
-      if (response.data) {
+     const result = await axios.post("http://localhost:3000/api/tasks" , newTask);
+      if (result.data) {
         console.log("ok");
       } else {
         console.log("ko");

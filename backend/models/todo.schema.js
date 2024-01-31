@@ -1,19 +1,19 @@
 import mongoose from "mongoose";
 
 const TodoSchema = new mongoose.Schema({
-    titre: {
+    title: {
         type: String,
         required: true,
       },
       priorite: {
         type: String, // Vous pouvez ajuster le type selon vos besoins (String, Number, etc.)
-        required: true,
+       
         enum: ['Hight', 'Medium', 'Low']
       },
-      statut: {
+      status: {
         type: String,
-        enum: ['À faire', 'En cours', 'Terminée'], // Enumération des statuts possibles
-        default: 'À faire',
+        enum: ['To do', 'Doing', 'Done'], // Enumération des statuts possibles
+        default: 'To do',
       },
       description: {
         type: String,
@@ -24,21 +24,21 @@ const TodoSchema = new mongoose.Schema({
       },
       creePar: {
         type: String, // Ou vous pouvez utiliser un type ObjectId si vous avez un modèle d'utilisateur
-        required: true,
+        
       },
       deadline: {
         type: Date,
-        required: false, // Vous pouvez ajuster selon que la deadline est optionnelle ou non
+         // Vous pouvez ajuster selon que la deadline est optionnelle ou non
       },
       commentaires: [
         {
           auteur: {
             type: String, // Ou ObjectId si vous avez un modèle d'utilisateur
-            required: true,
+            
           },
           contenu: {
             type: String,
-            required: true,
+          
           },
           date: {
             type: Date,

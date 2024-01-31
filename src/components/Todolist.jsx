@@ -7,7 +7,7 @@ const Todolist = () => {
   // const [tasks,setTasks] = useState([]);
 
   const addTask = async() => {
-    const newTask ={
+    const newTask = {
       title: taskTitle,
       status: "To do",
       description: "",

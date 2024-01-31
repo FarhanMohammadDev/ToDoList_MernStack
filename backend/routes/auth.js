@@ -33,7 +33,14 @@ router.post("/register", async(req,res)=>{
     })
     const result = await newUser.save();
 
-    const token = null;
+    const token = jwt.sign({
+        id: newUser._id,
+         username:newUser.username,
+         isAdmin: newUser.isAdmin
+        },"secretKey1234",{
+        expiresIn:"1h"
+        }
+    );
     // eslint-disable-next-line no-unused-vars
     const {password ,  ...other} = result._doc;
     res.status(201).json({...other , token});

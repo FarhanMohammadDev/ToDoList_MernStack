@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import process from "process"
 import router from "./routes/todos.routes.js"
 import cors from "cors"
+import {router as authPath} from "./routes/auth.js"
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,9 @@ mongoose.connect(MONGODB_URL)
 app.use(express.json());
 app.use(cors())
 app.use("/api" , router)
+app.use("/api" , router);
+app.use("/api/auth",authPath);
+
 
 
 

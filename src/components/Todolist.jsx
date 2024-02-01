@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Todolist = () => {
   const [showModal, setShowModal] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
-  // const [tasks,setTasks] = useState([]);
+  const [tasks,setTasks] = useState([]);
+  
+ 
 
   const addTask =  async() => {
     const newTask = {
@@ -29,11 +31,30 @@ const Todolist = () => {
       
     }
 
-
+  //  getAllTasks()
   };
 
- 
+  const getAllTasks = async() => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/tasks")
+      setTasks(response.data)
+      console.log(response.data);
+    } catch (error) {
+      
+      console.error(error);
+    }
 
+  }
+  useEffect(() => {
+   
+    getAllTasks();
+    
+  
+   
+  }, []);
+  
+
+ 
 
   return (
     <div className="h-full w-full flex items-center justify-center bg-teal-lightest font-sans ">

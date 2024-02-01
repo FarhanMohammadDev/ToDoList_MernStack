@@ -30,7 +30,7 @@ const getTaskById = async (req , res) => {
         const response = await TodoModel.find(req.params.id)
         res.status(200).json({
             data : response,
-            message : "All tasks are fetched "
+            message : "task is fetched "
         })
     } catch (error) {
         res.status(400).json({message : error.message})

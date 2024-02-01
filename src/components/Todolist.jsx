@@ -1,20 +1,40 @@
+import axios from "axios";
 import { useState } from "react";
 
 const Todolist = () => {
   const [showModal, setShowModal] = useState(false);
   const [taskTitle, setTaskTitle] = useState("");
+  // const [tasks,setTasks] = useState([]);
 
-  const [task,setTask] = useState()
-  const addTask = () => {
-    setTask(
-      { ...task,
-        title : taskTitle,
-        statut: "to do" ,
-        description : ""
+  const addTask =  async() => {
+    const newTask = {
+      title: taskTitle,
+      status: "To do",
+      description: "",
+      
+    }
+
+    try {
+      
+     const result = await axios.post("http://localhost:3000/api/tasks" , newTask);
+      if (result.data) {
+        console.log("ok");
+      } else {
+        console.log("ko");
+        
       }
-    );
-    console.log(task);
+   
+    } catch (error) {
+      console.error(error);
+      
+    }
+
+
   };
+
+ 
+
+
   return (
     <div className="h-full w-full flex items-center justify-center bg-teal-lightest font-sans ">
       <div className="flex flex-row flex-wrap justify-center">
@@ -119,7 +139,6 @@ const Todolist = () => {
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
         ) : null}
-
         {/* -------------------------Todo----------------------- */}
         <div  className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/3 border-solid border-2 border-yellow-500 ">
           <div className="mb-4 p-6 bg-yellow-500">

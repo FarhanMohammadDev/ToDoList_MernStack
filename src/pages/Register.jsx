@@ -7,7 +7,6 @@ const Register = () => {
     email : "",
     password : "",
   })
-  console.log(newUser);
 
   const register = () => {
     const myHeaders = new Headers();

@@ -27,7 +27,7 @@ const getTask = async (req, res) => {
 
 const getTaskById = async (req , res) => {
     try {
-        const response = await TodoModel.find(req.params.id)
+        const response = await TodoModel.findById(req.params.id)
         res.status(200).json({
             data : response,
             message : "All tasks are fetched "
@@ -39,7 +39,7 @@ const getTaskById = async (req , res) => {
 
 const UpdateTask = async(req , res)=> {
   try {
-    const response = await TodoModel.findByIdAndUpdate(req.params.id , {$set : req.body})
+    const response = await TodoModel.findByIdAndUpdate(req.params.id , {$set : req.body},{new:true})
     res.status(200).json({
         data : response,
         message : "Task is updated "

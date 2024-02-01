@@ -7,8 +7,8 @@ const TodoSchema = new mongoose.Schema({
   },
   priorite: {
     type: String, // Vous pouvez ajuster le type selon vos besoins (String, Number, etc.)
-
     enum: ["Hight", "Medium", "Low"],
+    default: "Hight",
   },
   status: {
     type: String,
@@ -18,6 +18,13 @@ const TodoSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  startDate:{
+    type: Date,
+  },
+  endDate: {
+    type: Date,
+  },
+
   supprimeA: {
     type: Date,
     default: null,
@@ -27,7 +34,6 @@ const TodoSchema = new mongoose.Schema({
   },
   deadline: {
     type: Date,
-    // Vous pouvez ajuster selon que la deadline est optionnelle ou non
   },
   commentaires: [
     {
@@ -43,7 +49,7 @@ const TodoSchema = new mongoose.Schema({
       },
     },
   ],
-});
+},{ timestamps: true });
 
 const TodoModel = mongoose.model("Todo", TodoSchema);
 export default TodoModel;

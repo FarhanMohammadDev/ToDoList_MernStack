@@ -15,25 +15,39 @@ const Todolist = () => {
   const [taskId, setTaskId] = useState(null);
   const [task, setTask] = useState("");
   const [updatedTaskData, setUpdatedTaskData] = useState({
-    title: '',
-    status: '',
-    description: ''
+    title: "",
+    status: "",
+    priorite: "",
+    description: "",
+    startDate: null,
+    endDate: null
   });
   // console.log(task);
 
+
+// Function to format ISO date to "yyyy-MM-dd"
+const formatDate = (isoDate) => {
+  const date = new Date(isoDate);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Adding 1 because getUTCMonth returns zero-based month
+  const day = String(date.getUTCDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
   async function fetchTaskById(taskId) {
     try {
-      const response = await axios.get(`http://localhost:3000/api/tasks/${taskId}`);
+      const response = await axios.get(
+        `http://localhost:3000/api/tasks/${taskId}`
+      );
       // console.log("API Response Task by ID:", response.data.data);
-      setTask(response.data.data) ; 
-      setUpdatedTaskData(response.data.data) ; 
-      setIsLoadingFindTask(false)
+      setTask(response.data.data);
+      setUpdatedTaskData(response.data.data);
+      setIsLoadingFindTask(false);
     } catch (error) {
       console.error("Error fetching task by ID:", error);
       throw error; // Rethrow the error for handling in the calling function
     }
   }
-  
 
   async function fetchData() {
     try {
@@ -49,7 +63,7 @@ const Todolist = () => {
   useEffect(() => {
     fetchData();
   }, []);
-// --------------------------------useFilter------------------------------------
+  // --------------------------------useFilter------------------------------------
   useEffect(() => {
     if (Array.isArray(tasks)) {
       const filterTasks = tasks.filter((task) => task.status === "To do");
@@ -79,10 +93,9 @@ const Todolist = () => {
       console.error("tasks is not an array:", tasks);
     }
   }, [tasks]);
-// --------------------------------useFilter------------------------------------
+  // --------------------------------useFilter------------------------------------
 
-
-// --------------------------------AddTask------------------------------------
+  // --------------------------------AddTask------------------------------------
   const addTask = async () => {
     const newTask = {
       title: taskTitle,
@@ -105,27 +118,32 @@ const Todolist = () => {
       console.error(error);
     }
   };
-// --------------------------------------------------------
-const updateTask = async (task_Id = updatedTaskData._id, updatedTask_Data = updatedTaskData) => {
-if (task_Id) {
-  try {
-    const result = await axios.put(`http://localhost:3000/api/tasks/${updatedTask_Data._id}`,updatedTask_Data);
-    if (result.data) {
-      console.log("Task updated successfully");
-      setShowModal(false)
-      fetchData();
-      // Call fetchData or any other method to update the tasks list
-    } else {
-      console.log("Failed to update task");
-      setShowModal(false)
+  // --------------------------------------------------------
+  const updateTask = async (
+    task_Id = updatedTaskData._id,
+    updatedTask_Data = updatedTaskData
+  ) => {
+    if (task_Id) {
+      try {
+        const result = await axios.put(
+          `http://localhost:3000/api/tasks/${updatedTask_Data._id}`,
+          updatedTask_Data
+        );
+        if (result.data) {
+          console.log("Task updated successfully");
+          setShowModal(false);
+          fetchData();
+          // Call fetchData or any other method to update the tasks list
+        } else {
+          console.log("Failed to update task");
+          setShowModal(false);
+        }
+      } catch (error) {
+        console.error("Error updating task:", error);
+        setShowModal(false);
+      }
     }
-  } catch (error) {
-    console.error("Error updating task:", error);
-    setShowModal(false)
-  }
-}
-};
-
+  };
 
   return (
     <>
@@ -137,156 +155,226 @@ if (task_Id) {
             {/* ---------------------showModal--------------------------- */}
             {showModal ? (
               <>
-               
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="relative w-full my-6 mx-auto max-w-3xl">
-                    {isLoadingFindTask ? (<h1>loading ... </h1>) : 
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                      {/*header*/}
-                      <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                        <div className="flex flex-col">
-                          <h3 className="text-3xl font-semibold ">
-                           title :  {isLoadingFindTask ? (<h1>loading</h1>) : task.title}
-                          </h3>
-                          <p className="text-slate-500 ">
-                            Create by : ...........{" "}
-                            <span className="text-slate-500 ">
-                              {" "}
-                              at : ........
+                    {isLoadingFindTask ? (
+                      <h1>loading ... </h1>
+                    ) : (
+                      <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        {/*header*/}
+                        <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                          <div className="flex flex-col">
+                            <h3 className="text-3xl font-semibold ">
+                              title :{" "}
+                              {isLoadingFindTask ? (
+                                <h1>loading</h1>
+                              ) : (
+                                task.title
+                              )}
+                            </h3>
+                            <p className="text-slate-500 ">
+                              Create by : ...........{" "}
+                              <span className="text-slate-500 ">
+                                {" "}
+                                at : ........
+                              </span>
+                            </p>
+                          </div>
+
+                          <button
+                            className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                            onClick={() => setShowModal(false)}
+                          >
+                            <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                              ×
                             </span>
-                          </p>
+                          </button>
                         </div>
-
-                        <button
-                          className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                          onClick={() => setShowModal(false)}
-                        >
-                          <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                            ×
-                          </span>
-                        </button>
-                      </div>
-                      {/*body*/}
-                      <div className="relative p-6 flex-auto">
-                        <div className="w-full min-w-full">
-                          <div className="mb-4">
-                            <label
-                              className="block text-gray-700 text-sm font-bold mb-2"
-                              htmlFor="username"
-                            >
-                              Titre
-                            </label>
-                            <input  value={updatedTaskData.title}  onChange={(e) => setUpdatedTaskData({ ...updatedTaskData, title: e.target.value })}
-                              className="shadow appearance-none border rounded w-full py-2 px-3
+                        {/*body*/}
+                        <div className="relative p-6 flex-auto">
+                          <div className="w-full min-w-full">
+                            <div className="mb-4">
+                              <label
+                                className="block text-gray-700 text-sm font-bold mb-2"
+                                htmlFor="username"
+                              >
+                                Titre
+                              </label>
+                              <input
+                                value={updatedTaskData.title}
+                                onChange={(e) =>
+                                  setUpdatedTaskData({
+                                    ...updatedTaskData,
+                                    title: e.target.value,
+                                  })
+                                }
+                                className="shadow appearance-none border rounded w-full py-2 px-3
                              text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                              id="title"
-                              type="text"
-                              placeholder="Titre de task"
-                            />
-                          </div>
-                          <div className="mb-4 flex gap-2">
-                            <div className="w-full">
-                              <label
-                                className="block text-gray-700 text-sm font-bold mb-2"
-                                htmlFor="username"
-                              >
-                                date de
-                              </label>
-                              <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3
-                           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="username"
-                                type="date"
+                                id="title"
+                                type="text"
                                 placeholder="Titre de task"
                               />
                             </div>
-
-                            <div className="w-full">
-                              <label
-                                className="block text-gray-700 text-sm font-bold mb-2"
-                                htmlFor="username"
-                              >
-                                date Au
-                              </label>
-                              <input
-                                className="shadow appearance-none border rounded w-full py-2 px-3
-                           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                id="username"
-                                type="date"
-                                placeholder="Titre de task"
-                              />
-                            </div>
-                          </div>
-                          <div className="mb-6">
-                            <label
-                              className="block text-gray-700 text-sm font-bold mb-2"
-                              htmlFor="username"
-                            >
-                              Description
-                            </label>
-                            <textarea
-                              value={updatedTaskData.description}
-                              onChange={(e) => setUpdatedTaskData({ ...updatedTaskData, description: e.target.value })}                            
-                              className="resize rounded-md shadow appearance-none border w-full py-2 px-3
-                           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            ></textarea>
-                          </div>
-
-                          <div className="mb-6 ">
-                            <label
-                              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                              htmlFor="grid-state"
-                            >
-                              Statut
-                            </label>
-                            <div className="relative">
-
-                              <select
-                                value={updatedTaskData.status}
-                                onChange={(e) => setUpdatedTaskData({ ...updatedTaskData, status: e.target.value })} 
-                                className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                id="grid-state"
-                              >
-                                <option value="To do">To do</option>
-                                <option value="Doing">Doing</option>
-                                <option value="Done">Done</option>
-                              </select>
-                              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                <svg
-                                  className="fill-current h-4 w-4"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 20 20"
+                            <div className="mb-4 flex gap-2">
+                              <div className="w-full">
+                                <label
+                                  className="block text-gray-700 text-sm font-bold mb-2"
+                                  htmlFor="username"
                                 >
-                                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                </svg>
+                                  start Date
+                                </label>
+                                <input value={formatDate(updatedTaskData.startDate)}
+                                onChange={(e) =>
+                                  setUpdatedTaskData({
+                                    ...updatedTaskData,
+                                    startDate: formatDate(e.target.value) ,
+                                  })
+                                }
+                                  className="shadow appearance-none border rounded w-full py-2 px-3
+                           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                  id="username"
+                                  type="date"
+                                  placeholder="Titre de task"
+                                />
+                              </div>
+
+                              <div className="w-full">
+                                <label
+                                  className="block text-gray-700 text-sm font-bold mb-2"
+                                  htmlFor="username"
+                                >
+                                  end Date
+                                </label>
+                                <input value={formatDate(updatedTaskData.endDate)}
+                                onChange={(e) =>
+                                  setUpdatedTaskData({
+                                    ...updatedTaskData,
+                                    endDate: formatDate(e.target.value),
+                                  })
+                                }
+                                  className="shadow appearance-none border rounded w-full py-2 px-3
+                                text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                  id="username"
+                                  type="date"
+                                  placeholder="Titre de task"
+                                />
+                              </div>
+                            </div>
+                            <div className="mb-6">
+                              <label
+                                className="block text-gray-700 text-sm font-bold mb-2"
+                                htmlFor="username"
+                              >
+                                Description
+                              </label>
+                              <textarea
+                                value={updatedTaskData.description}
+                                onChange={(e) =>
+                                  setUpdatedTaskData({
+                                    ...updatedTaskData,
+                                    description: e.target.value,
+                                  })
+                                }
+                                className="resize rounded-md shadow appearance-none border w-full py-2 px-3
+                           text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                              ></textarea>
+                            </div>
+
+                            <div className="mb-4 flex gap-2">
+                              <div className="w-full">
+                                <label
+                                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                  htmlFor="grid-state"
+                                >
+                                  Statut
+                                </label>
+                                <div className="relative">
+                                  <select
+                                    value={updatedTaskData.status}
+                                    onChange={(e) =>
+                                      setUpdatedTaskData({
+                                        ...updatedTaskData,
+                                        status: e.target.value,
+                                      })
+                                    }
+                                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="grid-state"
+                                  >
+                                    <option value="To do">To do</option>
+                                    <option value="Doing">Doing</option>
+                                    <option value="Done">Done</option>
+                                  </select>
+                                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg
+                                      className="fill-current h-4 w-4"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="w-full">
+                                <label
+                                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                  htmlFor="grid-state"
+                                >
+                                  priorite
+                                </label>
+                                <div className="relative">
+                                  <select
+                                    value={updatedTaskData.priorite}
+                                    onChange={(e) =>
+                                      setUpdatedTaskData({
+                                        ...updatedTaskData,
+                                        priorite: e.target.value,
+                                      })
+                                    }
+                                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    id="grid-state"
+                                  >
+                                    <option value="Hight">Hight</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Low">Low</option>
+                                  </select>
+                                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <svg
+                                      className="fill-current h-4 w-4"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                    </svg>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
+                        {/*footer*/}
+                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                          <button
+                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Close
+                          </button>
+                          <button
+                            className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={updateTask}
+                          >
+                            Save Changes
+                          </button>
+                        </div>
                       </div>
-                      {/*footer*/}
-                      <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                        <button
-                          className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          onClick={() => setShowModal(false)}
-                        >
-                          Close
-                        </button>
-                        <button
-                          className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                          type="button"
-                          onClick={ updateTask }
-                        >
-                          Save Changes
-                        </button>
-                      </div>
-                    </div>
-                    }
+                    )}
                   </div>
                 </div>
                 <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                
               </>
             ) : null}
             {/* -------------------------Todo----------------------- */}
@@ -329,7 +417,11 @@ if (task_Id) {
                       key={index}
                     >
                       <p
-                        onClick={() =>{setShowModal(true) ; setTaskId(task._id) ; fetchTaskById(task._id)} }
+                        onClick={() => {
+                          setShowModal(true);
+                          setTaskId(task._id);
+                          fetchTaskById(task._id);
+                        }}
                         className="w-full text-grey-darkest"
                       >
                         {/* Add another component to Tailwind Components */}
@@ -439,7 +531,11 @@ if (task_Id) {
                       key={index}
                     >
                       <p
-                        onClick={() => setShowModal(true)}
+                        onClick={() => {
+                          setShowModal(true);
+                          setTaskId(task._id);
+                          fetchTaskById(task._id);
+                        }}
                         className="w-full text-grey-darkest"
                       >
                         {/* Add another component to Tailwind Components */}
@@ -511,7 +607,11 @@ if (task_Id) {
                       key={index}
                     >
                       <p
-                        onClick={() => setShowModal(true)}
+                        onClick={() => {
+                          setShowModal(true);
+                          setTaskId(task._id);
+                          fetchTaskById(task._id);
+                        }}
                         className="w-full text-grey-darkest"
                       >
                         {/* Add another component to Tailwind Components */}

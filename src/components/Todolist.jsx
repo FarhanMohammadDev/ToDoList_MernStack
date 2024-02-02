@@ -39,7 +39,7 @@ const formatDate = (isoDate) => {
       const response = await axios.get(
         `http://localhost:3000/api/tasks/${taskId}`
       );
-      // console.log("API Response Task by ID:", response.data.data);
+      console.log("API Response Task by ID:", response.data.data);
       setTask(response.data.data);
       setUpdatedTaskData(response.data.data);
       setIsLoadingFindTask(false);
@@ -145,6 +145,16 @@ const formatDate = (isoDate) => {
     }
   };
 
+  //  ------------------------------Function to remove a task------------------------------------
+  const removeTask = async (taskId) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/tasks/${taskId}`);
+      setShowModal(false)
+      fetchData();
+    } catch (error) {
+      console.error('Error removing task:', error);
+    }
+  };
   return (
     <>
       {isLoading ? (
@@ -176,18 +186,17 @@ const formatDate = (isoDate) => {
                               Create by : ...........{" "}
                               <span className="text-slate-500 ">
                                 {" "}
-                                at : ........
+                                at : {updatedTaskData.createdAt && formatDate(updatedTaskData.createdAt)}
                               </span>
                             </p>
                           </div>
 
                           <button
-                            className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                            className="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
                             onClick={() => setShowModal(false)}
                           >
-                            <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                              ×
-                            </span>
+                            Close
                           </button>
                         </div>
                         {/*body*/}
@@ -223,7 +232,7 @@ const formatDate = (isoDate) => {
                                 >
                                   start Date
                                 </label>
-                                <input value={formatDate(updatedTaskData.startDate)}
+                                <input value={updatedTaskData.startDate && formatDate(updatedTaskData.startDate)}
                                 onChange={(e) =>
                                   setUpdatedTaskData({
                                     ...updatedTaskData,
@@ -245,7 +254,7 @@ const formatDate = (isoDate) => {
                                 >
                                   end Date
                                 </label>
-                                <input value={formatDate(updatedTaskData.endDate)}
+                                <input value={updatedTaskData.endDate && formatDate(updatedTaskData.endDate)}
                                 onChange={(e) =>
                                   setUpdatedTaskData({
                                     ...updatedTaskData,
@@ -335,9 +344,9 @@ const formatDate = (isoDate) => {
                                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="grid-state"
                                   >
-                                    <option value="Hight">Hight</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Low">Low</option>
+                                    <option value="Hight" className="text-red-500 ">Hight</option>
+                                    <option value="Medium" className="text-yellow-500 ">Medium</option>
+                                    <option value="Low" className="text-green-500 ">Low </option>
                                   </select>
                                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     <svg
@@ -354,13 +363,13 @@ const formatDate = (isoDate) => {
                           </div>
                         </div>
                         {/*footer*/}
-                        <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                        <div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-200 rounded-b">
                           <button
                             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                             type="button"
-                            onClick={() => setShowModal(false)}
+                            onClick={() => removeTask(updatedTaskData._id)}
                           >
-                            Close
+                            REMOVE TASK
                           </button>
                           <button
                             className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -416,7 +425,7 @@ const formatDate = (isoDate) => {
                       className="flex mb-4 items-center shadow p-3"
                       key={index}
                     >
-                      <p
+                      <div
                         onClick={() => {
                           setShowModal(true);
                           setTaskId(task._id);
@@ -424,9 +433,14 @@ const formatDate = (isoDate) => {
                         }}
                         className="w-full text-grey-darkest"
                       >
-                        {/* Add another component to Tailwind Components */}
+                      <div className="flex items-center">
+                        <div className={task.priorite === "Hight" && "h-2.5 w-2.5 rounded-full bg-red-500 me-2"  }></div> 
+                        <div className={task.priorite === "Medium" && "h-2.5 w-2.5 rounded-full bg-yellow-500 me-2"  }></div>
+                        <div className={task.priorite === "Low" && "h-2.5 w-2.5 rounded-full bg-green-500 me-2"  }></div> 
                         {task.title}
-                      </p>
+                      </div>
+                        
+                      </div>
                       <button className="flex-no-shrink  border-2 rounded hover:text-white hover:bg-slate-800 text-grey border-grey hover:bg-grey">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -479,43 +493,6 @@ const formatDate = (isoDate) => {
                   );
                 })}
 
-                {/* <div className="flex mb-4 items-center shadow p-3" >
-              <p className="w-full line-through text-green" onClick={() => setShowModal(true)}>
-                Submit Todo App Component to Tailwind Components
-              </p>
-              <button className="flex-no-shrink p-2 ml-4 mr-2 border-2 rounded hover:text-white hover:bg-slate-800 text-grey border-grey hover:bg-grey">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3"
-                  />
-                </svg>
-              </button>
-              <button className="flex-no-shrink p-2 ml-2 border-2 rounded text-red border-red hover:text-white hover:bg-slate-800 hover:bg-red">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                  />
-                </svg>
-              </button>
-            </div> */}
               </div>
             </div>
             {/* --------------------------Doing--------------------- */}
@@ -530,7 +507,7 @@ const formatDate = (isoDate) => {
                       className="flex mb-4 items-center shadow p-3"
                       key={index}
                     >
-                      <p
+                      <div
                         onClick={() => {
                           setShowModal(true);
                           setTaskId(task._id);
@@ -538,9 +515,13 @@ const formatDate = (isoDate) => {
                         }}
                         className="w-full text-grey-darkest"
                       >
-                        {/* Add another component to Tailwind Components */}
+                      <div className="flex items-center">
+                        <div className={task.priorite === "Hight" && "h-2.5 w-2.5 rounded-full bg-red-500 me-2"  }></div> 
+                        <div className={task.priorite === "Medium" && "h-2.5 w-2.5 rounded-full bg-yellow-500 me-2"  }></div>
+                        <div className={task.priorite === "Low" && "h-2.5 w-2.5 rounded-full bg-green-500 me-2"  }></div> 
                         {task.title}
-                      </p>
+                      </div>
+                      </div>
                       <button className="flex-no-shrink  border-2 rounded hover:text-white hover:bg-slate-800 text-grey border-grey hover:bg-grey">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -606,7 +587,7 @@ const formatDate = (isoDate) => {
                       className="flex mb-4 items-center shadow p-3"
                       key={index}
                     >
-                      <p
+                      <div
                         onClick={() => {
                           setShowModal(true);
                           setTaskId(task._id);
@@ -614,9 +595,13 @@ const formatDate = (isoDate) => {
                         }}
                         className="w-full text-grey-darkest"
                       >
-                        {/* Add another component to Tailwind Components */}
+                      <div className="flex items-center">
+                        <div className={task.priorite === "Hight" && "h-2.5 w-2.5 rounded-full bg-red-500 me-2"  }></div> 
+                        <div className={task.priorite === "Medium" && "h-2.5 w-2.5 rounded-full bg-yellow-500 me-2"  }></div>
+                        <div className={task.priorite === "Low" && "h-2.5 w-2.5 rounded-full bg-green-500 me-2"  }></div> 
                         {task.title}
-                      </p>
+                      </div>
+                      </div>
                       <button className="flex-no-shrink  border-2 rounded hover:text-white hover:bg-slate-800 text-grey border-grey hover:bg-grey">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

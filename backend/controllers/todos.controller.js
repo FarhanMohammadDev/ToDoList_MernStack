@@ -18,7 +18,7 @@ const getTask = async (req, res) => {
         const response = await TodoModel.find()
         res.status(200).json({
             data : response,
-            message : "All tasks are fetched "
+            message : "All tasks are fetched"
         })
     } catch (error) {
         res.status(400).json({message : error.message})
@@ -30,7 +30,7 @@ const getTaskById = async (req , res) => {
         const response = await TodoModel.findById(req.params.id)
         res.status(200).json({
             data : response,
-            message : "All tasks are fetched "
+            message : "Task is fetched"
         })
     } catch (error) {
         res.status(400).json({message : error.message})
@@ -42,7 +42,7 @@ const UpdateTask = async(req , res)=> {
     const response = await TodoModel.findByIdAndUpdate(req.params.id , {$set : req.body},{new:true})
     res.status(200).json({
         data : response,
-        message : "Task is updated "
+        message : "Task is updated"
     })
     
   } catch (error) {
@@ -52,11 +52,12 @@ const UpdateTask = async(req , res)=> {
 
 const DeleteTask = async(req , res) => {
     try {
-        const response = await TodoModel.findByIdAndDelete(req.params.id , {$set : req.body})
+        const response = await TodoModel.findByIdAndDelete(req.params.id)
         res.status(200).json({
-            data : response,
-            message : "Task is deleted "
+
+            message : "Task is deleted"
         })  
+        console.log(response.data);
     } catch (error) {
         res.status(400).json({message : error.message})
     }

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const login = () => {
     const myHeaders = new Headers();
@@ -27,6 +29,7 @@ const Login = () => {
         );
         const result = await response.text();
         console.log(result);
+        navigate("/")
       } catch (error) {
         console.log("error", error);
       }

@@ -39,7 +39,7 @@ const getTaskById = async (req , res) => {
 
 const UpdateTask = async(req , res)=> {
   try {
-    const response = await TodoModel.findByIdAndUpdate(req.params.id , {$set : req.body})
+    const response = await TodoModel.findByIdAndUpdate(req.params.id , {$set : req.body},{new:true})
     res.status(200).json({
         data : response,
         message : "Task is updated "
@@ -62,10 +62,21 @@ const DeleteTask = async(req , res) => {
     }
 }
 
+const softDeleteTask = async (req, res) => {
+    try {
+      const taskId = req.params.id;
+      const updatedTask = await TodoModel.findByIdAndUpdate(taskId, { deleted: true }, { new: true });
+      res.json(updatedTask);
+    } catch (error) {
+      res.status(500).json({ error: 'Could not delete task' });
+    }
+}
+
 export default {
     CreateTask, 
     getTask,
     getTaskById,
     UpdateTask,
-    DeleteTask
+    DeleteTask,
+    softDeleteTask
 }

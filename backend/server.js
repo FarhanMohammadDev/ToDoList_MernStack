@@ -19,7 +19,6 @@ mongoose.connect(MONGODB_URL)
 
 app.use(express.json());
 app.use(cors())
-app.use("/api" , router)
 app.use("/api" , router);
 app.use("/api/auth",authPath);
 

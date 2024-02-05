@@ -156,17 +156,28 @@ const Todolist = () => {
       console.error("Error soft deleting task:", error);
     }
   };
-    // ----------------------------------Function to restaurer a task--------------------------------
-    const restaurer = (taskId) => {
-      const task = tasks.find((task) => task._id === taskId);
-      const taskRestaurer= { ...task, deleted: false };
-      console.log(taskRestaurer);
-      updateTask(taskId, taskRestaurer);
-    };
+  // ----------------------------------Function to restaurer a task--------------------------------
+  const restaurer = (taskId) => {
+    const task = tasks.find((task) => task._id === taskId);
+    const taskRestaurer = { ...task, deleted: false };
+    console.log(taskRestaurer);
+    updateTask(taskId, taskRestaurer);
+  };
   return (
     <>
       {isLoading ? (
-        <h1>loading</h1>
+        <div className="h-screen flex items-center justify-center">
+          <div className="animate-pulse flex flex-col items-center gap-4 w-60">
+            <div>
+              <div className="w-48 h-6 bg-slate-400 rounded-md" />
+              <div className="w-28 h-4 bg-slate-400 mx-auto mt-3 rounded-md" />
+            </div>
+            <div className="h-7 bg-slate-400 w-full rounded-md" />
+            <div className="h-7 bg-slate-400 w-full rounded-md" />
+            <div className="h-7 bg-slate-400 w-full rounded-md" />
+            <div className="h-7 bg-slate-400 w-1/2 rounded-md" />
+          </div>
+        </div>
       ) : (
         <div className="h-full w-full flex items-center justify-center bg-teal-lightest font-sans ">
           <div className="flex flex-row flex-wrap justify-center">
@@ -176,7 +187,18 @@ const Todolist = () => {
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                   <div className="relative w-full my-6 mx-auto max-w-3xl">
                     {isLoadingFindTask ? (
-                      <h1>loading ... </h1>
+                      <div className="h-screen flex items-center justify-center">
+                        <div className="animate-pulse flex flex-col items-center gap-4 w-60">
+                          <div>
+                            <div className="w-48 h-6 bg-slate-400 rounded-md" />
+                            <div className="w-28 h-4 bg-slate-400 mx-auto mt-3 rounded-md" />
+                          </div>
+                          <div className="h-7 bg-slate-400 w-full rounded-md" />
+                          <div className="h-7 bg-slate-400 w-full rounded-md" />
+                          <div className="h-7 bg-slate-400 w-full rounded-md" />
+                          <div className="h-7 bg-slate-400 w-1/2 rounded-md" />
+                        </div>
+                      </div>
                     ) : (
                       <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                         {/*header*/}
@@ -421,8 +443,8 @@ const Todolist = () => {
             ) : null}
             {/* ------------------------------------------------ */}
             {/* -------------------------Todo----------------------- */}
-            <div className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/3 border-solid border-2 border-yellow-500 ">
-              <div className="mb-4 p-6 bg-yellow-500">
+            <div className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/3 border-solid border-2 border-blue-400 ">
+              <div className="mb-4 text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 ">
                 <h1 className="text-grey-darkest">To do</h1>
                 <div className="flex mt-4 ">
                   <input
@@ -456,7 +478,15 @@ const Todolist = () => {
                 {tasksTodo.map((task, index) => {
                   return (
                     <div
-                      className="flex mb-4 items-center shadow p-3"
+                      className={
+                        task.priorite === "Hight"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-red-300 rounded-lg  dark:text-slate-900 dark:border-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80"`
+                          : task.priorite === "Medium"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-yellow-300 rounded-lg  dark:text-slate-900 dark:border-yellow-800 shadow-lg shadow-yellow-500/50 dark:shadow-lg dark:shadow-yellow-800/80"`
+                          : task.priorite === "Low"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-green-300 rounded-lg  dark:text-slate-900 dark:border-yellow-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80"`
+                          : ""
+                      }
                       key={index}
                     >
                       <div
@@ -465,7 +495,7 @@ const Todolist = () => {
                           setTaskId(task._id);
                           fetchTaskById(task._id);
                         }}
-                        className="w-full text-grey-darkest"
+                        className="w-full text-grey-darkest font-medium"
                       >
                         <div
                           className={
@@ -495,6 +525,7 @@ const Todolist = () => {
                           {task.title}
                         </div>
                       </div>
+
                       <button
                         title="Doing"
                         onClick={() => handleStatusChange(task._id, "Doing")}
@@ -561,15 +592,24 @@ const Todolist = () => {
               </div>
             </div>
             {/* --------------------------Doing--------------------- */}
-            <div className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/4 border-solid border-2 border-blue-400">
-              <div className="mb-4 bg-blue-600 p-6">
+
+            <div className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/4 border-solid border-2 border-blue-500">
+              <div className="mb-4 text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2  ">
                 <h1 className="text-grey-darkest">Doing</h1>
               </div>
               <div>
                 {tasksDoing.map((task, index) => {
                   return (
                     <div
-                      className="flex mb-4 items-center shadow p-3"
+                      className={
+                        task.priorite === "Hight"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-red-300 rounded-lg  dark:text-slate-900 dark:border-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80"`
+                          : task.priorite === "Medium"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-yellow-300 rounded-lg  dark:text-slate-900 dark:border-yellow-800 shadow-lg shadow-yellow-500/50 dark:shadow-lg dark:shadow-yellow-800/80"`
+                          : task.priorite === "Low"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-green-300 rounded-lg  dark:text-slate-900 dark:border-yellow-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80"`
+                          : ""
+                      }
                       key={index}
                     >
                       <div
@@ -675,15 +715,23 @@ const Todolist = () => {
               </div>
             </div>
             {/* --------------------------Done----------------------- */}
-            <div className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/4 border-solid border-2 border-green-600">
-              <div className="mb-4  bg-green-600 p-6">
+            <div className="bg-white rounded shadow-xl p-4 m-4 md:basis-1/4 border-solid border-2 border-blue-600">
+              <div className="mb-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 ">
                 <h1 className="text-grey-darkest ">Done</h1>
               </div>
               <div>
                 {tasksDone.map((task, index) => {
                   return (
                     <div
-                      className="flex mb-4 items-center shadow p-3"
+                      className={
+                        task.priorite === "Hight"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-red-300 rounded-lg  dark:text-slate-900 dark:border-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80"`
+                          : task.priorite === "Medium"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-yellow-300 rounded-lg  dark:text-slate-900 dark:border-yellow-800 shadow-lg shadow-yellow-500/50 dark:shadow-lg dark:shadow-yellow-800/80"`
+                          : task.priorite === "Low"
+                          ? `flex items-center bg-slate-50  p-4 mb-4 text-sm text-slate-900 border border-green-300 rounded-lg  dark:text-slate-900 dark:border-yellow-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80"`
+                          : ""
+                      }
                       key={index}
                     >
                       <div
@@ -793,15 +841,26 @@ const Todolist = () => {
       )}
       {/* ----------------modalSoftDelete */}
       <div className="flex justify-end">
-        <button title="Trash"
+        <button
+          title="Trash"
           className="text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
           type="button"
           onClick={() => setShowModalSoftDelete(true)}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+            />
           </svg>
-
         </button>
         {showModalSoftDelete ? (
           <>
@@ -855,7 +914,8 @@ const Todolist = () => {
                                   </th>
                                   <td className="px-6 py-4">Farhan</td>
                                   <td className="px-6 py-4">
-                                    <button onClick={() => restaurer(task._id)}
+                                    <button
+                                      onClick={() => restaurer(task._id)}
                                       type="button"
                                       className="text-green-700 border border-green-700 hover:bg-green-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:focus:ring-green-800 dark:hover:bg-green-500"
                                     >

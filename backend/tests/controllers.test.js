@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import TodoModel from "../models/todo.schema.js";
 import TodoController from "../controllers/todos.controller.js"; 
 

@@ -13,14 +13,19 @@ const Navbar = () => {
     { id: 3, name: "Register", link: "/register" },
   ];
   return (
-    <div className='bg-black text-white flex justify-between items-center h-24 max-w-full  px-4 '>
-      <h1 className='w-full text-3xl font-bold text-[#00df9a]'>To Do List Mern Stack</h1>
+    <div className='bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl text-white flex justify-between items-center h-24 max-w-full  px-4 '>
+      <h1 className='w-full text-3xl font-bold text-[#00df9a]'>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      </svg>
+        To Do List 
+        </h1>
 
       <ul className='hidden md:flex'>
         {Links.map(item => (
           <li
             key={item.id}
-            className='p-4 hover:bg-[#00df9a] rounded-xl m-2 cursor-pointer duration-300 hover:text-black'
+            className='p-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2'
           >
             <Link key={item.id} to={item.link}>
               {item.name}
@@ -36,16 +41,21 @@ const Navbar = () => {
       <ul
         className={
           nav
-            ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-[#000300] ease-in-out duration-500'
+            ? 'fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900 bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl text-white ease-in-out duration-500'
             : 'ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%]'
         }
       >
-        <h1 className='w-full text-3xl font-bold text-[#00df9a] m-4'>To Do List</h1>
+        <h1 className='w-full text-3xl font-bold text-[#00df9a] m-4'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+      </svg>
+        To Do List 
+        </h1>
 
         {Links.map(item => (
           <li
             key={item.id}
-            className='p-4 border-b rounded-xl hover:bg-[#00df9a] duration-300 hover:text-black cursor-pointer border-gray-600'
+            className='p-4 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2'
           >
             <Link key={item.id} to={item.link}>
               {item.name}

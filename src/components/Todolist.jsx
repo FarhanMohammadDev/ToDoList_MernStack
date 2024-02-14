@@ -448,7 +448,7 @@ const Todolist = () => {
                 <h1 className="text-grey-darkest">To do</h1>
                 <div className="flex mt-4 ">
                   <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-grey-darker"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 mr-4 text-black"
                     value={taskTitle}
                     onChange={(e) => setTaskTitle(e.target.value)}
                     placeholder="Add Todo"

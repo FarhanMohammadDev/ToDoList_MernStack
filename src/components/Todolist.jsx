@@ -64,6 +64,7 @@ const Todolist = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
   // --------------------------------useFilter------------------------------------
   useEffect(() => {
     const filterTasksByStatus = (status) => {
@@ -79,7 +80,6 @@ const Todolist = () => {
     setTasksDone(filterTasksByStatus("Done"));
   }, [tasks]);
 
-  // --------------------------------useFilter------------------------------------
 
   // --------------------------------AddTask------------------------------------
   const addTask = async () => {

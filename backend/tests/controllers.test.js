@@ -34,7 +34,7 @@ describe("getTask", () => {
 
 describe("getTaskById", () => {
   // Test case for successful task retrieval
-  test("should return task data with status 200", async () => {
+  it("should return task data with status 200", async () => {
     const mockTask = { _id: "mockId", title: "Mock Task" };
 
     // Mocking the findById method of TodoModel

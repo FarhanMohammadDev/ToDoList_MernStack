@@ -39,7 +39,7 @@ const getTaskById = async (req , res) => {
 
 const UpdateTask = async(req , res)=> {
   try {
-    const response = await TodoModel.findByIdAndUpdate(req.params.id , {$set : req.body},{new:true})
+    const response = await TodoModel.findByIdAndUpdate(req.params.id ,req.body, {new:true})
     res.status(200).json({
         data : response,
         message : "Task is updated"

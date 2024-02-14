@@ -4,7 +4,7 @@ function verifyToken(req,res,next) {
     const token =  req.headers.token;
     if (token) {
         try {
-            const decoded = jwt.verify(token,"secretKey1234")  // decoded = {id ,admin}
+            const decoded = jwt.verify(token,"secretKey1234")  
             req.user = decoded;
             next();
         } catch (error) {

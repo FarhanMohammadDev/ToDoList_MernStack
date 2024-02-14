@@ -11,6 +11,7 @@ router.post("/tasks" , TodoController.CreateTask)
 router.put("/tasks/:id" , TodoController.UpdateTask)
 
 router.delete("/tasks/:id" , TodoController.DeleteTask)
+
 router.delete("/softDeleteTask/:id" , TodoController.softDeleteTask)
 
 export default router;
